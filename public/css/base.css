@@ -57,3 +57,121 @@ p, ul {
 ul {
   padding-left: 30px;
 }
+
+.initButton {
+  background-color: #0687c8;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 100%;
+}
+
+.submitButton {
+  background-color: #d1d2d3;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 100%;
+}
+
+.cancelButton {
+  background-color: #202e2a;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width: 100%;
+}
+
+.slider {
+	overflow-y: hidden;
+	max-height: 100%; /* approximate max height */
+
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease-in-out 0.5s;
+
+}
+
+.slider.closed {
+	max-height: 0;
+  top: 100%;
+}
+
+.buttonShown{
+  visibility: visible;
+  opacity: 1;
+  transition: all 0.3s ease-in-out 0.5s;
+}
+
+.buttonHidden{
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out 0.5s;
+}
+
+.slotText{
+  text-align: center;
+}
+
+.innerDatesList{
+  overflow:hidden;
+}
+
+.containerDatesList {
+  overflow:hidden;
+}
+
+.dateElement {
+  float:left;
+  color: white;
+  background-color:#009a77;
+  width:20%;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.adviceText{
+  text-align: center;
+}
+
+.adviceExplain{
+  text-align: center;
+}
+
+.dayName{
+  font-size: 12px;
+      margin: 0px 0;
+}
+
+.dayNumberSelected{
+      font-size: 24px;
+      color: #edd070;
+      margin: 0px 0;
+}
+
+.dayNumber{
+    font-size: 24px;
+    margin: -10px 0;
+}
+
+.dayMonth{
+  font-size: 12px;
+      margin: 0px 0;
+}
