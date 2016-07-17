@@ -12,5 +12,5 @@ It's based on
     node server.js
 
 # URL to test
-  It can take a few minutes to load because it's in a free account an enter in asleep
+  It can take a few seconds to load because it's deployed in a free heroku account and enter in asleep
   https://movebubbletest.herokuapp.com/
