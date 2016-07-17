@@ -61,43 +61,56 @@ ul {
 .initButton {
   background-color: #0687c8;
   border: none;
-  color: white;
-  padding: 15px 32px;
+  color: #FFFFFF;
+  padding: 1rem 2rem;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 1rem;
   width: 100%;
 }
 
 .submitButton {
   background-color: #d1d2d3;
   border: none;
-  color: white;
-  padding: 15px 32px;
+  color: #FFFFFF;
+  padding: 1rem 2rem;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.submitButtonSelected {
+  background-color: #2f86bf;
+  border: none;
+  color: #FFFFFF;
+  padding: 1rem 2rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  padding: 1rem;
+  font-size: 1rem;
   width: 100%;
 }
 
 .cancelButton {
   background-color: #202e2a;
   border: none;
-  color: white;
-  padding: 15px 32px;
+  color: #FFFFFF;
+  padding: 1rem 2rem;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  padding: 1rem;
+  font-size: 1.25rem;
   width: 100%;
 }
 
 .slider {
 	overflow-y: hidden;
-	max-height: 100%; /* approximate max height */
-
+	max-height: 100%;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -125,8 +138,26 @@ ul {
   transition: all 0.3s ease-in-out 0.5s;
 }
 
+.slot{
+  background-color: #f0f2f1;
+  color:#000;
+  margin-top: -.75rem;
+  margin-bottom: -.75rem;
+}
+
+.slotSelected{
+  background-color: #1f282e;
+  color:#FFFFF;
+  margin-top: -.75rem;
+  margin-bottom: -.75rem;
+}
+
 .slotText{
   text-align: center;
+  vertical-align: middle;
+  font-size: 1.25rem;
+  padding-top: .75rem;
+  height: 2.5rem;
 }
 
 .innerDatesList{
@@ -142,8 +173,8 @@ ul {
   width:20%;
   text-align: center;
   display: inline-block;
-  font-size: 16px;
-  color: white;
+  font-size: 1.1rem;
+  color: #FFFFFF;
 }
 
 .dateElementSelected {
@@ -151,17 +182,17 @@ ul {
   width:20%;
   text-align: center;
   display: inline-block;
-  font-size: 16px;
-  color: white;
+  font-size: 1.1rem;
+  color: #FFFFFF;
 }
 
 .flecha {
   width: 0;
 	height: 0;
   margin: 0 auto;
-	border-left: .5rem solid transparent;
-	border-right: .5rem solid transparent;
-	border-top: 1rem solid #06785b;
+	border-left: .75rem solid transparent;
+	border-right: .75rem solid transparent;
+	border-top: .75rem solid #06785b;
 }
 
 .adviceText{
@@ -173,38 +204,38 @@ ul {
 }
 
 .dayNameSelected{
-  font-size: 12px;
+  font-size: .8rem;
   margin: 0px 0;
   background-color:#06785b;
 }
 
 .dayName{
-  font-size: 12px;
+  font-size: .8rem;
   margin: 0px 0;
   background-color:#009a77;
 }
 
 .dayNumberSelected{
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #edd070;
-  margin: -10px 0;
+  margin: -.5rem 0;
   background-color:#06785b;
 }
 
 .dayNumber{
-  font-size: 24px;
-  margin: -10px 0;
+  font-size: 1.5rem;
+  margin: -.5rem 0;
   background-color:#009a77;
 }
 
 .dayMonthSelected{
-  font-size: 12px;
+  font-size: .8rem;
   margin: 0px 0;
   background-color:#06785b;
 }
 
 .dayMonth{
-  font-size: 12px;
+  font-size: .8rem;
   margin: 0px 0;
   background-color:#009a77;
 }
