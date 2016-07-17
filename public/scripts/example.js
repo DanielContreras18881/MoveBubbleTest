@@ -1,47 +1,92 @@
+var Day = React.createClass({
+  getInitialState: function() {
+    return {
+      selected: this.props.selected,
+      classDate: this.props.selected ? "dateElementSelected" : "dateElement",
+      classDayNumber: this.props.selected ? "dayNumberSelected" : "dayNumber",
+      classDayMonth: this.props.selected ? "dayMonthSelected" : "dayMonth",
+      classDayName: this.props.selected ? "dayNameSelected" : "dayName"
+    };
+  },
+  selectDay: function(){
+    this.props.updateSelectedDate(this.key);
+  },
+  componentWillReceiveProps: function(nextProps) {
+    this.setState({
+      selected: nextProps.selected,
+      classDate: nextProps.selected ? "dateElementSelected" : "dateElement",
+      classDayNumber: nextProps.selected ? "dayNumberSelected" : "dayNumber",
+      classDayMonth: nextProps.selected ? "dayMonthSelected" : "dayMonth",
+      classDayName: nextProps.selected ? "dayNameSelected" : "dayName"
+    });
+  },
+  render: function() {
+    return (
+      <div className={this.state.classDate} onClick={this.selectDay}>
+        <p className={this.state.classDayName}>{this.props.dayName}</p>
+        <p className={this.state.classDayNumber}>{this.props.dayNumber}</p>
+        <p className={this.state.classDayMonth}>{this.props.dayMonth}</p>
+        { this.state.selected ? <div className="flecha"></div> : null }
+      </div>
+    )
+  }
+});
+
 var Dates = React.createClass({
+  getInitialState: function() {
+    return{
+      data: [
+        {
+          id: 1,
+          dayName: moment().format('ddd').toUpperCase(),
+          dayNumber: moment().date(),
+          dayMonth: moment().format('MMM').toUpperCase(),
+          selected:true
+        },
+        {
+          id: 2,
+          dayName: moment().add(1, 'days').format('ddd').toUpperCase(),
+          dayNumber: moment().add(1, 'days').date(),
+          dayMonth: moment().add(1, 'days').format('MMM').toUpperCase(),
+          selected:false
+        },
+        {
+          id: 3,
+          dayName: moment().add(2, 'days').format('ddd').toUpperCase(),
+          dayNumber: moment().add(2, 'days').date(),
+          dayMonth: moment().add(2, 'days').format('MMM').toUpperCase(),
+          selected:false
+        },
+        {
+          id: 4,
+          dayName: moment().add(3, 'days').format('ddd').toUpperCase(),
+          dayNumber: moment().add(3, 'days').date(),
+          dayMonth: moment().add(3, 'days').format('MMM').toUpperCase(),
+          selected:false
+        },
+        {
+          id: 5,
+          dayName: moment().add(4, 'days').format('ddd').toUpperCase(),
+          dayNumber: moment().add(4, 'days').date(),
+          dayMonth: moment().add(4, 'days').format('MMM').toUpperCase(),
+          selected:false
+        }
+      ]
+    };
+  },
+  handleDayChange: function(value) {
+    var dates = this.state.data.filter(function(item) {
+        if(item.id === value){
+          item.selected = true;
+        }else{
+          item.selected = false;
+        }
+        return item;
+      });
+    this.setState({data:dates});
+  },
   render: function() {
         var textExplain = "We'll walk to the agent and book it in.";
-        var dates = [
-          {
-            id: 1,
-            dayName: moment().format('ddd').toUpperCase(),
-            dayNumber: moment().date(),
-            dayMonth: moment().format('MMM').toUpperCase()
-          },
-          {
-            id: 2,
-            dayName: moment().add(1, 'days').format('ddd').toUpperCase(),
-            dayNumber: moment().add(1, 'days').date(),
-            dayMonth: moment().add(1, 'days').format('MMM').toUpperCase()
-          },
-          {
-            id: 3,
-            dayName: moment().add(2, 'days').format('ddd').toUpperCase(),
-            dayNumber: moment().add(2, 'days').date(),
-            dayMonth: moment().add(2, 'days').format('MMM').toUpperCase()
-          },
-          {
-            id: 4,
-            dayName: moment().add(3, 'days').format('ddd'),
-            dayNumber: moment().add(3, 'days').date(),
-            dayMonth: moment().add(3, 'days').format('MMM')
-          },
-          {
-            id: 5,
-            dayName: moment().add(4, 'days').format('ddd'),
-            dayNumber: moment().add(4, 'days').date(),
-            dayMonth: moment().add(4, 'days').format('MMM')
-          }
-        ];
-        var datesNodes = dates.map(function(day) {
-          return (
-            <div key={day.id}  className="dateElement">
-              <p className="dayName">{day.dayName}</p>
-              <p className="dayNumber">{day.dayNumber}</p>
-              <p className="dayMonth">{day.dayMonth}</p>
-            </div>
-          );
-        });
 
     return (
       <div>
@@ -51,7 +96,18 @@ var Dates = React.createClass({
         <p className="adviceExplain">{textExplain}</p>
         <div id="container" className="containerDatesList">
           <div id="inner"  className="innerDatesList">
-            {datesNodes}
+            {this.state.data.map(function(day) {
+              var boundClick = this.handleDayChange.bind(this, day.id);
+              return (
+                <Day
+                    selected={day.selected}
+                    dayMonth={day.dayMonth}
+                    dayNumber={day.dayNumber}
+                    dayName={day.dayName}
+                    key={day.id}
+                    updateSelectedDate={boundClick}/>
+              );
+            },this)}
           </div>
         </div>
       </div>
@@ -60,18 +116,14 @@ var Dates = React.createClass({
 });
 
 var Slot = React.createClass({
-  rawMarkup: function() {
-    /*
-    var md = new Remarkable();
-    var rawMarkup = md.render(this.props.children.toString());
-    return { __html: rawMarkup };
-    */
-           //<span dangerouslySetInnerHTML={this.rawMarkup()} />
+  selectedSlot: function() {
+    console.log('props:'+JSON.stringify(this.props));
+    console.log('state:'+JSON.stringify(this.state));
   },
 
   render: function() {
     return (
-      <div className="slot">
+      <div className="slot" onClick={this.selectedSlot}>
         <h2 className="slotText">
           {this.props.name} ({this.props.desc})
         </h2>
@@ -117,8 +169,8 @@ var Calendar = React.createClass({
             />
         </div>
 
-        <div className={this.state.timeslots} onClick={this.handleClick}>
-          <TimeSlotList />
+        <div className={this.state.timeslots}>
+          <TimeSlotList submitData={this.handleClick} cancelData={this.handleClick}/>
         </div>
       </div>
     );
@@ -143,7 +195,7 @@ var TimeSlotList = React.createClass({
   render: function() {
     var timeSlotNodes = timeslots.map(function(slot) {
       return (
-        <Slot name={slot.slot} desc={slot.hours} key={slot.id} />
+        <Slot name={slot.slot} desc={slot.hours} key={slot.id}/>
       );
     });
 
@@ -153,7 +205,7 @@ var TimeSlotList = React.createClass({
           className="cancelButton"
           type="button"
           value="V"
-          onClick={this.handleClick}
+          onClick={this.props.cancelData}
         />
         <Dates/>
         {timeSlotNodes}
@@ -161,7 +213,7 @@ var TimeSlotList = React.createClass({
           className="submitButton"
           type="button"
           value="SELECT MULTIPLE TIMESLOTS"
-          onClick={this.handleClick}
+          onClick={this.props.submitData}
         />
       </div>
     );

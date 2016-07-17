@@ -139,12 +139,29 @@ ul {
 
 .dateElement {
   float:left;
-  color: white;
-  background-color:#009a77;
   width:20%;
   text-align: center;
   display: inline-block;
   font-size: 16px;
+  color: white;
+}
+
+.dateElementSelected {
+  float:left;
+  width:20%;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  color: white;
+}
+
+.flecha {
+  width: 0;
+	height: 0;
+  margin: 0 auto;
+	border-left: .5rem solid transparent;
+	border-right: .5rem solid transparent;
+	border-top: 1rem solid #06785b;
 }
 
 .adviceText{
@@ -155,23 +172,39 @@ ul {
   text-align: center;
 }
 
+.dayNameSelected{
+  font-size: 12px;
+  margin: 0px 0;
+  background-color:#06785b;
+}
+
 .dayName{
   font-size: 12px;
-      margin: 0px 0;
+  margin: 0px 0;
+  background-color:#009a77;
 }
 
 .dayNumberSelected{
-      font-size: 24px;
-      color: #edd070;
-      margin: 0px 0;
+  font-size: 24px;
+  color: #edd070;
+  margin: -10px 0;
+  background-color:#06785b;
 }
 
 .dayNumber{
-    font-size: 24px;
-    margin: -10px 0;
+  font-size: 24px;
+  margin: -10px 0;
+  background-color:#009a77;
+}
+
+.dayMonthSelected{
+  font-size: 12px;
+  margin: 0px 0;
+  background-color:#06785b;
 }
 
 .dayMonth{
   font-size: 12px;
-      margin: 0px 0;
+  margin: 0px 0;
+  background-color:#009a77;
 }
