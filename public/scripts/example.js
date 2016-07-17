@@ -1,3 +1,6 @@
+/**
+ * A day to change in the selector
+ */
 var Day = React.createClass({
   getInitialState: function() {
     return {
@@ -9,9 +12,15 @@ var Day = React.createClass({
     };
     this.props.updateSelectedDateElement(1);
   },
+  /**
+   * Day selected
+   */
   selectDay: function(){
     this.props.updateSelectedDateElement(this.key);
   },
+  /**
+   * Change the state when the date changes
+   */
   componentWillReceiveProps: function(nextProps) {
     this.setState({
       selected: nextProps.selected,
@@ -32,8 +41,13 @@ var Day = React.createClass({
     )
   }
 });
-
+/**
+ * List of the next five days
+ */
 var Dates = React.createClass({
+  /**
+   * Initialize the state with five dates from today
+   */
   getInitialState: function() {
     return{
       data: [
@@ -80,6 +94,9 @@ var Dates = React.createClass({
       ]
     };
   },
+  /**
+   * Store the date changed
+   */
   handleDayChange: function(value) {
     var dateSelected = null;
     var dates = this.state.data.filter(function(item) {
@@ -95,8 +112,7 @@ var Dates = React.createClass({
     this.props.updateSelectedDate(dateSelected);
   },
   render: function() {
-        var textExplain = "We'll walk to the agent and book it in.";
-
+    var textExplain = "We'll walk to the agent and book it in.";
     return (
       <div>
         <h3 className="adviceText">
@@ -123,7 +139,9 @@ var Dates = React.createClass({
     );
   }
 });
-
+/**
+ * Slot of time
+ */
 var Slot = React.createClass({
   getInitialState: function() {
     return {
@@ -131,11 +149,13 @@ var Slot = React.createClass({
       slotsSelected:0
     };
   },
+  /**
+   * Make the changes and store the slot selected/deselected
+   */
   selectedSlot: function() {
     this.setState({classSlot:this.state.classSlot==='slot'?'slotSelected':'slot'});
     this.props.updateSlotsSelected(this.props);
   },
-
   render: function() {
     return (
       <div className={this.state.classSlot} onClick={this.selectedSlot}>
@@ -147,62 +167,9 @@ var Slot = React.createClass({
     );
   }
 });
-
-var Calendar = React.createClass({
-  getInitialState: function() {
-    return {
-      timeslots:"slider closed",
-      calendarButton: 'buttonShown',
-      slotsSelected: []
-    };
-  },
-  changeView:function(){
-    if (this.state.timeslots === 'slider'){
-        this.setState({
-                        timeslots: 'slider closed',
-                        calendarButton: 'buttonShown',
-                        slotsSelected: this.state.slotsSelected
-                      });
-    } else {
-        this.setState({
-                        timeslots: 'slider',
-                        calendarButton: 'buttonHidden',
-                        slotsSelected: this.state.slotsSelected
-                      });
-    }
-  },
-  handleClick: function() {
-    console.log('Request a viewing is shown at the bottom of the screen');
-    this.changeView();
-  },
-  handleSubmit: function(values) {
-    console.log('Slots selected:');
-    console.log(JSON.stringify(values));
-    this.changeView();
-  },
-  render: function() {
-    return (
-      <div>
-        <div className={this.state.calendarButton}>
-          <h1>MoveBubble Test</h1>
-          <h2>Based on ReactJS Tutorial</h2>
-
-            <input
-              className="initButton"
-              type="button"
-              value="SCHEDULE A VIEWING"
-              onClick={this.handleClick}
-            />
-        </div>
-
-        <div className={this.state.timeslots}>
-          <TimeSlotList submitData={this.handleSubmit} cancelData={this.handleClick}/>
-        </div>
-      </div>
-    );
-  }
-});
-
+/**
+ * Constant with the different slots allowed
+ */
 const timeslots = [ {
                     "id": 1,
                     "slot": "Morning",
@@ -216,7 +183,9 @@ const timeslots = [ {
                     "slot": "Evening",
                     "hours": "18:00 - 22:00"
                   } ];
-
+/**
+ * Lit of time slots to select them
+ */
 var TimeSlotList = React.createClass({
   getInitialState: function() {
     return {
@@ -233,6 +202,9 @@ var TimeSlotList = React.createClass({
       textSubmitbutton:'SELECT MULTIPLE TIMESLOTS'
     };
   },
+  /**
+   * Store the slot selected or remove it from the slot's list
+   */
   handleSlotChange: function(value){
     var slot = timeslots.filter(function(item) {
         if(item.id === value){
@@ -245,7 +217,6 @@ var TimeSlotList = React.createClass({
     var slots = this.state.slotsData;
     var addSlot = true;
     this.state.slotsData.filter(function(item) {
-      [{"id":1,"slot":"Morning","hours":"08:00 - 12:00","slotDate":17,"slotMonth":"JUL","slotYear":"2016"}]
         if(
           item.slot === slot.slot &&
           item.hours === slot.hours &&
@@ -267,12 +238,18 @@ var TimeSlotList = React.createClass({
       textSubmitbutton:slots.length>0?'SEND '+slots.length+' TIMESLOTS':'SELECT MULTIPLE TIMESLOTS',
     });
   },
+  /**
+   * Store the date changed in the time slot selector
+   */
   handleDaySelected:function (value){
     this.setState({
       slotsData:this.state.slotsData,
       dateSelected:value
     });
   },
+  /**
+   * Return the data from the time slot selector to the parent Component
+   */
   returnSlotsData:function (){
     this.props.submitData(this.state.slotsData);
   },
@@ -302,7 +279,75 @@ var TimeSlotList = React.createClass({
     );
   }
 });
+/**
+ * Creates the whole componet to use in any web page
+ */
+var Calendar = React.createClass({
+  getInitialState: function() {
+    return {
+      timeslots:"slider closed",
+      calendarButton: 'buttonShown',
+      slotsSelected: []
+    };
+  },
+  /**
+   * Show/Hide the timeslot selector
+   */
+  changeView:function(){
+    if (this.state.timeslots === 'slider'){
+        this.setState({
+                        timeslots: 'slider closed',
+                        calendarButton: 'buttonShown',
+                        slotsSelected: this.state.slotsSelected
+                      });
+    } else {
+        this.setState({
+                        timeslots: 'slider',
+                        calendarButton: 'buttonHidden',
+                        slotsSelected: this.state.slotsSelected
+                      });
+    }
+  },
+  /**
+   * Show the timeslot and hide the button
+   */
+  handleClick: function() {
+    console.log('Request a viewing is shown at the bottom of the screen');
+    this.changeView();
+  },
+  /**
+   * Write the result in console, hide the timeslot selector and show the button
+   */
+  handleSubmit: function(values) {
+    console.log('Slots selected:');
+    console.log(JSON.stringify(values));
+    this.changeView();
+  },
+  render: function() {
+    return (
+      <div>
+        <div className={this.state.calendarButton}>
+          <h1>MoveBubble Test</h1>
+          <h2>Based on ReactJS Tutorial</h2>
 
+            <input
+              className="initButton"
+              type="button"
+              value="SCHEDULE A VIEWING"
+              onClick={this.handleClick}
+            />
+        </div>
+
+        <div className={this.state.timeslots}>
+          <TimeSlotList submitData={this.handleSubmit} cancelData={this.handleClick}/>
+        </div>
+      </div>
+    );
+  }
+});
+/**
+ * Shows the component at the 'content' div in the web page
+ */
 ReactDOM.render(
   <Calendar/>,
   document.getElementById('content')
