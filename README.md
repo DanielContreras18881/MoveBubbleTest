@@ -7,8 +7,11 @@ It's based on
 
 # To test
   Clone this repository
+  
   Run the following commands
+    
     npm install
+    
     node server.js
 
 # URL to test
