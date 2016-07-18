@@ -1,21 +1,22 @@
 # MoveBubbleTest
 
 This is a test to MoveBubble, a simple example with ReactJS
-It's based on
-  https://github.com/reactjs/react-tutorial/
+
+  It's based on
+    https://github.com/reactjs/react-tutorial/
 
 
 # To test
-  Clone this repository
+  Clone this repository in a folder
 
-  Run the following commands
+  Run the following commands on the folder created before
 
     npm install
 
     node server.js
 
 # URL to test
-  It can take a few seconds to load because it's deployed in a free heroku account and enter in asleep
+  It can take a few seconds to load because it's deployed in a free Heroku account and enter in asleep on inactivity times
 
     https://movebubbletest.herokuapp.com/
 
@@ -32,4 +33,4 @@ It's based on
 
     Motorola Nexus 6    (Chrome)
 
-    All device & sizes on Chrome Developer Tools
+    All sizes provided on Chrome Developer Tools
