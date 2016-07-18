@@ -10,13 +10,14 @@ var Day = React.createClass({
       classDayMonth: this.props.selected ? "dayMonthSelected" : "dayMonth",
       classDayName: this.props.selected ? "dayNameSelected" : "dayName"
     };
-    this.props.updateSelectedDateElement(1);
+    this.props.updateSelectedDateElement(1,[]);
   },
   /**
    * Day selected
    */
   selectDay: function(){
-    this.props.updateSelectedDateElement(this.key);
+    var slotsSelected = this.props.slots !==undefined ? this.props.slots : [];
+    this.props.updateSelectedDateElement(this.key,slotsSelected);
   },
   /**
    * Change the state when the date changes
@@ -42,6 +43,19 @@ var Day = React.createClass({
   }
 });
 /**
+ * Constant with the different slots allowed
+ */
+const timeslotsdata = [ {
+                    slot: "Morning",
+                    hours: "08:00 - 12:00"
+                  }, {
+                    slot: "Afertnoon",
+                    hours: "12:00 - 18:00"
+                  }, {
+                    slot: "Evening",
+                    hours: "18:00 - 22:00"
+                  } ];
+/**
  * List of the next five days
  */
 var Dates = React.createClass({
@@ -57,7 +71,8 @@ var Dates = React.createClass({
           dayNumber: moment().date(),
           dayMonth: moment().format('MMM').toUpperCase(),
           dayYear: moment().format('YYYY'),
-          selected:true
+          selected:true,
+          slotsSelected:[]
         },
         {
           id: 2,
@@ -65,7 +80,8 @@ var Dates = React.createClass({
           dayNumber: moment().add(1, 'days').date(),
           dayMonth: moment().add(1, 'days').format('MMM').toUpperCase(),
           dayYear: moment().add(1, 'days').format('YYYY'),
-          selected:false
+          selected:false,
+          slotsSelected:[]
         },
         {
           id: 3,
@@ -73,7 +89,8 @@ var Dates = React.createClass({
           dayNumber: moment().add(2, 'days').date(),
           dayMonth: moment().add(2, 'days').format('MMM').toUpperCase(),
           dayYear: moment().add(2, 'days').format('YYYY'),
-          selected:false
+          selected:false,
+          slotsSelected:[]
         },
         {
           id: 4,
@@ -81,7 +98,8 @@ var Dates = React.createClass({
           dayNumber: moment().add(3, 'days').date(),
           dayMonth: moment().add(3, 'days').format('MMM').toUpperCase(),
           dayYear: moment().add(3, 'days').format('YYYY'),
-          selected:false
+          selected:false,
+          slotsSelected:[]
         },
         {
           id: 5,
@@ -89,7 +107,8 @@ var Dates = React.createClass({
           dayNumber: moment().add(4, 'days').date(),
           dayMonth: moment().add(4, 'days').format('MMM').toUpperCase(),
           dayYear: moment().add(4, 'days').format('YYYY'),
-          selected:false
+          selected:false,
+          slotsSelected:[]
         }
       ]
     };
@@ -97,12 +116,13 @@ var Dates = React.createClass({
   /**
    * Store the date changed
    */
-  handleDayChange: function(value) {
+  handleDayChange: function(value,slots) {
     var dateSelected = null;
     var dates = this.state.data.filter(function(item) {
         if(item.id === value){
           item.selected = true;
           dateSelected = item;
+          dateSelected.slotsSelected = slots;
         }else{
           item.selected = false;
         }
@@ -110,6 +130,12 @@ var Dates = React.createClass({
       });
     this.setState({data:dates});
     this.props.updateSelectedDate(dateSelected);
+  },
+  /**
+   * Store the slots changed
+   */
+  handleSlotsChange: function(value) {
+    this.props.updateSlotsSelected(value);
   },
   render: function() {
     var textExplain = "We'll walk to the agent and book it in.";
@@ -122,19 +148,27 @@ var Dates = React.createClass({
         <div id="container" className="containerDatesList">
           <div id="inner"  className="innerDatesList">
             {this.state.data.map(function(day) {
-              var dateSelected = this.handleDayChange.bind(this, day.id);
+              var dateSelected = this.handleDayChange.bind(this, day.id,day.slotsSelected);
               return (
                 <Day
                     selected={day.selected}
                     dayMonth={day.dayMonth}
                     dayNumber={day.dayNumber}
                     dayName={day.dayName}
+                    slots={day.slotsSelected}
                     key={day.id}
                     updateSelectedDateElement={dateSelected}/>
               );
             },this)}
           </div>
         </div>
+        {timeslotsdata.map(function(slot) {
+          var slotSelected = this.handleSlotsChange.bind(this, slot.slot);
+          var dateSelected = this.props.selectedDate;
+          return (
+            <Slot slotDate={dateSelected} name={slot.slot} desc={slot.hours} key={slot.slot+dateSelected.dayNumber} updateSlotSelected={slotSelected}/>
+          );
+        },this)}
       </div>
     );
   }
@@ -144,17 +178,53 @@ var Dates = React.createClass({
  */
 var Slot = React.createClass({
   getInitialState: function() {
+    var slotSelected = false;
+    var slotKey = this.props.name;
+    this.props.slotDate.slotsSelected.filter(function(slotItem) {
+      if(slotItem!==undefined && slotItem===slotKey) slotSelected = true;
+    });
     return {
-      classSlot:"slot",
-      slotsSelected:0
+      classSlot:slotSelected?"slotSelected":"slot",
+      selected:slotSelected,
+      slotDate:this.props.slotDate
     };
+  },
+  /**
+   * Change the state when the slot changes
+   */
+  componentWillReceiveProps: function(nextProps) {
+    var slotSelected = false;
+    var slotKey = this.props.name;
+    nextProps.slotDate.slotsSelected.filter(function(slotItem) {
+      if(slotItem!==undefined && slotItem===slotKey) slotSelected = true;
+    });
+    this.setState({
+      classSlot: slotSelected ? "slotSelected" : "slot",
+      selected: slotSelected,
+      slotDate:nextProps.slotDate
+    });
   },
   /**
    * Make the changes and store the slot selected/deselected
    */
   selectedSlot: function() {
-    this.setState({classSlot:this.state.classSlot==='slot'?'slotSelected':'slot'});
-    this.props.updateSlotsSelected(this.props);
+    var selectedDate = this.state.slotDate;
+    var slotSelected = false;
+    var slotKey = this.props.name;
+    selectedDate.slotsSelected.filter(function(slotItem) {
+      if(slotItem!=undefined && slotItem===slotKey) slotSelected = true;
+    });
+    if(!slotSelected){
+      selectedDate.slotsSelected.push(this.props.name);
+    }else{
+      selectedDate.slotsSelected.pop(this.props.name);
+    }
+    this.setState({
+      classSlot:this.state.classSlot==='slot'?'slotSelected':'slot',
+      selected:this.state.selected ? true : false,
+      slotDate:selectedDate
+    });
+    this.props.updateSlotSelected(this.props);
   },
   render: function() {
     return (
@@ -168,22 +238,6 @@ var Slot = React.createClass({
   }
 });
 /**
- * Constant with the different slots allowed
- */
-const timeslots = [ {
-                    "id": 1,
-                    "slot": "Morning",
-                    "hours": "08:00 - 12:00"
-                  }, {
-                    "id": 2,
-                    "slot": "Afertnoon",
-                    "hours": "12:00 - 18:00"
-                  }, {
-                    "id": 3,
-                    "slot": "Evening",
-                    "hours": "18:00 - 22:00"
-                  } ];
-/**
  * Lit of time slots to select them
  */
 var TimeSlotList = React.createClass({
@@ -196,7 +250,8 @@ var TimeSlotList = React.createClass({
         dayNumber: moment().date(),
         dayMonth: moment().format('MMM').toUpperCase(),
         dayYear: moment().format('YYYY'),
-        selected:true
+        selected:true,
+        slotsSelected:[]
       },
       classSubmitbutton:'submitButton',
       textSubmitbutton:'SELECT MULTIPLE TIMESLOTS'
@@ -206,36 +261,44 @@ var TimeSlotList = React.createClass({
    * Store the slot selected or remove it from the slot's list
    */
   handleSlotChange: function(value){
-    var slot = timeslots.filter(function(item) {
-        if(item.id === value){
-          return item
+    console.log('handleSlotChange:value:'+JSON.stringify(value));
+    var slotData = timeslotsdata.filter(function(item) {
+      console.log('handleSlotChange:timeslotsdata:'+JSON.stringify(item));
+        if(item.slot === value){
+          return item;
         }
       })[0];
-    slot.slotDate=this.state.dateSelected.dayNumber;
-    slot.slotMonth=this.state.dateSelected.dayMonth;
-    slot.slotYear=this.state.dateSelected.dayYear;
+    var slot = {
+      slot: slotData.slot,
+      hours: slotData.hours,
+      slotDate: this.state.dateSelected.dayNumber,
+      slotMonth: this.state.dateSelected.dayMonth,
+      slotYear: this.state.dateSelected.dayYear
+    };
     var slots = this.state.slotsData;
     var addSlot = true;
+    var slotId = slot.slotDate+'_'+slot.slot;
+    console.log('handleSlotChange:this.state.slotsData:'+JSON.stringify(this.state.slotsData));
     this.state.slotsData.filter(function(item) {
-        if(
-          item.slot === slot.slot &&
-          item.hours === slot.hours &&
-          item.slotDate === slot.slotDate &&
-          item.slotMonth === slot.slotMonth &&
-          item.slotYear === slot.slotYear){
+      var slotItemId = item.slotDate+'_'+item.slot;
+        console.log(slotId + '===' + slotItemId);
+        if(slotId === slotItemId){
             addSlot = false;
         }
     });
     if(addSlot) {
+      console.log('handleSlotChange:push');
       slots.push(slot);
     }else{
+      console.log('handleSlotChange:pop');
       slots.pop(slot);
     }
+    console.log('handleSlotChange:slots:'+JSON.stringify(slots));
     this.setState({
       data:slots,
       dateSelected:this.state.dateSelected,
       classSubmitbutton:slots.length>0?'submitButtonSelected':'submitButton',
-      textSubmitbutton:slots.length>0?'SEND '+slots.length+' TIMESLOTS':'SELECT MULTIPLE TIMESLOTS',
+      textSubmitbutton:slots.length>0?'SEND '+slots.length+' TIMESLOTS':'SELECT MULTIPLE TIMESLOTS'
     });
   },
   /**
@@ -244,7 +307,9 @@ var TimeSlotList = React.createClass({
   handleDaySelected:function (value){
     this.setState({
       slotsData:this.state.slotsData,
-      dateSelected:value
+      dateSelected:value,
+      classSubmitbutton:this.state.slotsData.length>0?'submitButtonSelected':'submitButton',
+      textSubmitbutton:this.state.slotsData.length>0?'SEND '+this.state.slotsData.length+' TIMESLOTS':'SELECT MULTIPLE TIMESLOTS'
     });
   },
   /**
@@ -262,13 +327,7 @@ var TimeSlotList = React.createClass({
           value="V"
           onClick={this.props.cancelData}
         />
-        <Dates updateSelectedDate={this.handleDaySelected}/>
-        {timeslots.map(function(slot) {
-          var slotSelected = this.handleSlotChange.bind(this, slot.id);
-          return (
-            <Slot name={slot.slot} desc={slot.hours} key={slot.id} updateSlotsSelected={slotSelected}/>
-          );
-        },this)}
+        <Dates selectedDate={this.state.dateSelected} updateSelectedDate={this.handleDaySelected} updateSlotsSelected={this.handleSlotChange}/>
         <input
           className={this.state.classSubmitbutton}
           type="button"

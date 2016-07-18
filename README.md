@@ -19,17 +19,17 @@ It's based on
 
     https://movebubbletest.herokuapp.com/
 
-
-# Test with Jest
-
-  
-
 # Size tests
+  Tested on:
 
-  Tesed on:
     Iphone 6s           (Safari)
+
     Iphone 4            (Safari)
+
     Samsung Galaxy S4   (Chrome)
+
     LG Nexus 4          (Chrome)
+
     Motorola Nexus 6    (Chrome)
+
     All device & sizes on Chrome Developer Tools
